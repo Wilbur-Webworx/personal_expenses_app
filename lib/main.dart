@@ -1,8 +1,10 @@
 //Importing packages
 import 'package:flutter/material.dart';
-import './widgets/user_transaction.dart';
 
 //Importing local files
+import './models/transaction.dart';
+import './widgets/new_transaction.dart';
+import './widgets/transactionList.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,7 +18,71 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+// void startAddNewTransaction(Buidler ctx) {
+//   showModalBottomSheet(
+//     context: ctx,
+//     builder: (bCtx) {
+//       return New
+//     },
+//   );
+// }
+
+class MyHomePage extends StatefulWidget {
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  List<Transaction> _userTransactions = [
+    Transaction(
+      id: "t1",
+      title: "New Shoes",
+      amount: 69.99,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: "t2",
+      title: "Weekly Groceries",
+      amount: 16.53,
+      date: DateTime.now(),
+    ),
+  ];
+
+  void _addNewTransaction(String txTitle, double txAmount) {
+    final newTx = Transaction(
+      id: DateTime.now().toString(),
+      title: txTitle,
+      amount: txAmount,
+      date: DateTime.now(),
+    );
+
+    setState(() {
+      _userTransactions.add(newTx);
+    });
+
+    // void _startAddNewTransaction(BuildContext ctx) {
+    //   showModalBottomSheet(
+    //     context: ctx,
+    //     builder: (_) {
+    //       return NewTransaction(_addNewTransaction);
+    //     },
+    //   );
+    // }
+  }
+
+  void _startAddNewTransaction(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (_) {
+        return GestureDetector(
+          onTap: () {},
+          child: NewTransaction(_addNewTransaction),
+          behavior: HitTestBehavior.opaque,
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +90,9 @@ class MyHomePage extends StatelessWidget {
         title: Text('Flutter App'),
         actions: <Widget>[
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _startAddNewTransaction(context);
+            },
             icon: Icon(Icons.add),
           )
         ],
@@ -44,7 +112,7 @@ class MyHomePage extends StatelessWidget {
                 elevation: 5,
               ),
             ),
-            UserTransaction(),
+            TransactionList(_userTransactions),
           ],
         ),
       ),
@@ -53,7 +121,7 @@ class MyHomePage extends StatelessWidget {
         child: Icon(
           Icons.add,
         ),
-        onPressed: () {},
+        onPressed: () => _startAddNewTransaction(context),
       ),
     );
   }
