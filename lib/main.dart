@@ -1,7 +1,8 @@
-import 'dart:ui';
-
+//Importing packages
 import 'package:flutter/material.dart';
-import './transaction.dart';
+import 'package:intl/intl.dart';
+
+//Importing local files
 
 void main() => runApp(MyApp());
 
@@ -16,20 +17,13 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatelessWidget {
-  final List<Transaction> transactions = [
-    Transaction(
-      id: "t1",
-      title: "New Shoes",
-      amount: 69.99,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: "t2",
-      title: "Weekly Groceries",
-      amount: 16.53,
-      date: DateTime.now(),
-    ),
-  ];
+
+  // String titleInput;
+  // String amountInput;
+
+  final titleController = TextEditingController();
+
+  final amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +32,7 @@ class MyHomePage extends StatelessWidget {
         title: Text('Flutter App'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
@@ -51,10 +45,52 @@ class MyHomePage extends StatelessWidget {
               elevation: 5,
             ),
           ),
+          Card(
+            //Card containing textfields(UserInput)
+            elevation: 5,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  TextField(
+                    //First Text Field
+                    decoration: InputDecoration(
+                      labelText: 'Title',
+                    ),
+                    controller: titleController,
+                    // onChanged: (value) {
+                    //   titleInput = value;
+                    // },
+                  ),
+                  TextField(
+                    // First Text Field
+                    decoration: InputDecoration(
+                      labelText: 'Amount',
+                    ),
+                    controller: amountController,
+                    // onChanged: (value) {
+                    //   amountInput = value;
+                    // },
+                  ),
+                  FlatButton(
+                    textColor: Colors.purple,
+                    onPressed: () {
+                      print(titleController.text);
+                      print(amountController.text);
+                    },
+                    child: Text("Add Transaction"),
+                  )
+                ],
+              ),
+            ),
+          ),
           Column(
+            //Overall Column
             children: transactions
                 .map(((tx) => Card(
                       child: Row(
+                        //Price Row
                         children: <Widget>[
                           Container(
                             margin: EdgeInsets.symmetric(
@@ -79,6 +115,7 @@ class MyHomePage extends StatelessWidget {
                             ),
                           ),
                           Column(
+                            //Title and date row, with two columns in it
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Text(
@@ -91,7 +128,8 @@ class MyHomePage extends StatelessWidget {
                               ),
                               Text(
                                 //Date of item
-                                tx.date.toString(),
+                                DateFormat.yMMMd()
+                                    .format(tx.date), //tx.date.toString(),
                                 style: TextStyle(
                                   color: Colors.grey,
                                 ),
